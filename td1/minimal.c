@@ -34,6 +34,7 @@ int main(int argc, char** argv) {
     /* Boucle d'affichage */
 
     glClearColor(1, 0, 0, 1);
+        
     int loop = 1;
     while(loop) {
 
@@ -41,7 +42,7 @@ int main(int argc, char** argv) {
         Uint32 startTime = SDL_GetTicks();
         
         /* Placer ici le code de dessin */
-	
+	glClear(GL_COLOR_BUFFER_BIT);
         /* Echange du front et du back buffer : mise à jour de la fenêtre */
         SDL_GL_SwapBuffers();
         
@@ -59,13 +60,19 @@ int main(int argc, char** argv) {
             switch(e.type) {
 
                 /* Clic souris */
-                case SDL_MOUSEBUTTONUP:
+	        case SDL_MOUSEBUTTONUP:
                     printf("clic en (%d, %d)\n", e.button.x, e.button.y);
+		    glClearColor(e.button.x/(float)WINDOW_WIDTH, e.button.y/(float)WINDOW_HEIGHT, 0, 1);
                     break;
 
+	        case SDL_MOUSEMOTION:
+		  glClearColor(e.motion.xrel/(float)WINDOW_WIDTH, e.motion.yrel/(float)WINDOW_HEIGHT, 0, 1);
+		    break;
                 /* Touche clavier */
                 case SDL_KEYDOWN:
-                    printf("touche pressée (code = %d)\n", e.key.keysym.sym);
+		  printf("touche pressée (code = %d)\n", e.key.keysym.sym);
+		    if (e.key.keysym.sym == 113)
+		      loop = 0;
                     break;
 
                 default:
